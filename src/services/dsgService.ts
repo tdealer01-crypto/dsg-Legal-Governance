@@ -51,7 +51,7 @@ flowchart LR
 
 ---
 
-## 🚀 Why DSG? (The 10k⭐ Standard)
+## 🚀 Why DSG?
 
 1. **Zero Hallucination Risk**: Decisions are binary (SAT/UNSAT) based on formal logic.
 2. **Ultra-Low Latency**: Optimized for real-time systems (avg. 4µs).
@@ -97,7 +97,7 @@ DSG is released under the [Apache 2.0 License](LICENSE).
 `;
 
 export const launchStrategy = `
-# 🚀 DSG Launch Strategy: Path to 10k Stars
+# 🚀 DSG Launch Strategy
 
 To make the DSG Ecosystem viral on GitHub, we follow a multi-phase strategy focused on **Authority**, **Utility**, and **Community**.
 
@@ -575,7 +575,7 @@ DSG introduces **Deterministic Transition Filtering** as a hard constraint on AI
 | Reliability | ~95% (Stochastic) | 100% (Provable) |
 | Audit | Text Logs | Proof Artifacts |
 
-**Future Work (The 10k⭐ Path):**
+**Future Work:**
 - **arXiv Paper**: "Formalizing Deterministic Alignment: A Safety Automaton Approach to AI Control."
 - **Coq Integration**: Moving from SMT-based validation to interactive theorem proving for the core kernel.
 - **Novelty Analysis**: Comparative study against existing guardrail frameworks (Guardrails AI, Nemo Guardrails) highlighting the deterministic advantage.

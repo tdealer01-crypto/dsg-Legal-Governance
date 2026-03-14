@@ -43,7 +43,6 @@ export default function App() {
   const [simulationLogs, setSimulationLogs] = useState<any[]>([]);
   const [isSimulating, setIsSimulating] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
-  const [starCount, setStarCount] = useState(9842);
   const [activeInvariants, setActiveInvariants] = useState<string[]>(['Temporal Monotonicity', 'State Continuity']);
   const [demoStatus, setDemoStatus] = useState<'idle' | 'processing' | 'ALLOW' | 'BLOCK' | 'STABILIZE'>('idle');
   const [demoActiveNode, setDemoActiveNode] = useState(0);
@@ -235,21 +234,9 @@ export default function App() {
         </div>
 
         <div className="mt-auto p-8 space-y-4">
-          <div className="p-4 bg-zinc-900/50 border border-white/5 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase">GitHub Status</span>
-              <div className="flex items-center gap-1 text-emerald-500">
-                <Star className="w-2.5 h-2.5" fill="currentColor" />
-                <span className="text-[10px] font-bold">{(starCount / 1000).toFixed(1)}k</span>
-              </div>
-            </div>
-            <div className="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 w-[98%]" />
-            </div>
-          </div>
-          <button className="w-full py-3 bg-white text-black font-black text-xs rounded-xl hover:bg-emerald-500 transition-colors flex items-center justify-center gap-2">
+          <a href="https://github.com/tdealer01-crypto/dsg-Legal-Governance" target="_blank" rel="noopener noreferrer" className="w-full py-3 bg-white text-black font-black text-xs rounded-xl hover:bg-emerald-500 transition-colors flex items-center justify-center gap-2">
             <Github size={14} /> STAR ON GITHUB
-          </button>
+          </a>
         </div>
       </aside>
 
@@ -283,9 +270,9 @@ export default function App() {
             <button className="p-2 text-zinc-400 hover:text-white transition-colors">
               <Search size={18} />
             </button>
-            <button className="flex items-center gap-2 px-3 py-1.5 bg-white text-black text-xs font-bold rounded hover:bg-zinc-200 transition-colors">
-              <Github size={14} /> Star 10k+
-            </button>
+            <a href="https://github.com/tdealer01-crypto/dsg-Legal-Governance" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-3 py-1.5 bg-white text-black text-xs font-bold rounded hover:bg-zinc-200 transition-colors">
+              <Github size={14} /> Star on GitHub
+            </a>
           </div>
         </header>
 
@@ -331,9 +318,6 @@ export default function App() {
                 <section className="relative">
                   <div className="absolute -top-24 -left-24 w-96 h-96 bg-emerald-500/10 blur-[120px] rounded-full" />
                   <div className="relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-500 mb-8 uppercase tracking-widest">
-                      <Star size={10} fill="currentColor" /> Trending #1 on GitHub Safety
-                    </div>
                     <h1 className="text-8xl font-black tracking-tighter mb-6 text-white leading-[0.85]">
                       DETERMINISTIC <br />
                       <span className="text-emerald-500">ALIGNMENT.</span>
