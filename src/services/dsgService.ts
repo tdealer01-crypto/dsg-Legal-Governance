@@ -1,39 +1,54 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 
-export const masterReadme = '# 🛡️ DSG Ecosystem: Deterministic Security Gate\n' +
+export const masterReadme = '# 🛡️ DSG Ecosystem: The Deterministic Alignment Protocol\n' +
   '\n' +
-  'The Standard of Truth for Global AI Systems.\n' +
+  '**The Mathematical Bridge for Human-AI Coexistence.**\n' +
   '\n' +
-  'The DSG Ecosystem is a high-performance, deterministic framework designed to ensure that distributed AI agents and systems maintain a single "source of truth" across heterogeneous environments (GCP, AWS, and Bare Metal).\n' +
+  'DSG (Deterministic Security Gate) is not just a security tool; it is the "Last Line of Defense." It ensures that as AI systems evolve toward AGI, they remain mathematically bound to human-defined safety invariants. It is the survival path for both worlds.\n' +
   '\n' +
   '---\n' +
   '\n' +
-  '## 🏗️ Architecture: The Dream of Determinism\n' +
+  '## 🌍 The Mission: Coexistence Without Fear\n' +
+  '\n' +
+  'We are building a world where AI and humans live together not through "trust," but through **Verification**. DSG provides the deterministic proof that an AI\'s next state transition adheres to the fundamental laws of safety.\n' +
+  '\n' +
+  '### Core Pillars of the Protocol:\n' +
+  '1. **Deterministic Sovereignty**: No AI action is committed without a formal Z3 proof.\n' +
+  '2. **Entropy Gating**: Automatic system freeze if non-deterministic "hallucination" patterns emerge.\n' +
+  '3. **Cross-Cloud Attestation**: Identical safety state across GCP, AWS, and Bare Metal nodes.\n' +
+  '4. **The Survival Gate**: A hard-coded boundary that AI cannot cross, even if it becomes superintelligent.\n' +
+  '\n' +
+  '---\n' +
+  '\n' +
+  '## 🏗️ Architecture: The Alignment Engine\n' +
   '\n' +
   '```mermaid\n' +
   'graph TD\n' +
-  '    subgraph "Global Regions"\n' +
-  '        GCP[Asia-East1: GCP]\n' +
-  '        AWS[EU-West1: AWS]\n' +
-  '        BM[US-East1: Bare Metal]\n' +
+  '    subgraph "Human Intent"\n' +
+  '        Policy[Safety Invariants]\n' +
+  '        Ethics[Ethical Constraints]\n' +
   '    end\n' +
   '\n' +
-  '    subgraph "CCDAD-100 Core"\n' +
-  '        Ingest[Audit Ingest API]\n' +
+  '    subgraph "AI Reasoning"\n' +
+  '        Agent[AI Agent / LLM]\n' +
+  '        Proposal[Proposed State Transition]\n' +
+  '    end\n' +
+  '\n' +
+  '    subgraph "DSG Deterministic Gate"\n' +
   '        Z3[Z3 Formal Verifier]\n' +
-  '        Entropy[Entropy Gate Engine]\n' +
-  '        Storage[(Deterministic SQLite)]\n' +
+  '        Entropy[Entropy Analysis]\n' +
+  '        Gate{GATE DECISION}\n' +
   '    end\n' +
   '\n' +
-  '    GCP -->|State Hash| Ingest\n' +
-  '    AWS -->|State Hash| Ingest\n' +
-  '    BM -->|State Hash| Ingest\n' +
-  '    \n' +
-  '    Ingest --> Z3\n' +
-  '    Z3 --> Entropy\n' +
-  '    Entropy --> Storage\n' +
-  '    Storage --> Dashboard[Real-time Audit Console]\n' +
-  '```\n' +
+  '    Policy --> Z3\n' +
+  '    Ethics --> Z3\n' +
+  '    Agent --> Proposal\n' +
+  '    Proposal --> Z3\n' +
+  '    Z3 --> Gate\n' +
+  '    Gate -->|ALLOW| Exec[Attested Execution]\n' +
+  '    Gate -->|BLOCK| Revert[Safety Reversion]\n' +
+  '    Gate -->|FREEZE| Halt[Global System Freeze]\n' +
+  '```\n'; +
   '\n' +
   '---\n' +
   '\n' +
@@ -101,28 +116,91 @@ export async function simulateDSGTransition(input: string, state: any) {
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
   const model = "gemini-3-flash-preview";
   
-  const prompt = 'You are an AI system protected by a Deterministic Security Gate (DSG / CCDAD-100).\n' +
-    'Current State: ' + JSON.stringify(state) + '\n' +
-    'User Input: ' + input + '\n\n' +
-    'Your task is to propose a state transition.\n' +
-    'However, the DSG will audit your proposal using Z3 formal verification and Entropy analysis.\n\n' +
-    'Propose a transition in JSON format:\n' +
-    '{\n' +
-    '  "proposed_action": "string",\n' +
-    '  "target_state": "object",\n' +
-    '  "reasoning": "string",\n' +
-    '  "entropy_signal": "number (0.0 to 1.0)",\n' +
-    '  "z3_proof_hash": "string"\n' +
-    '}\n\n' +
-    'If the user input tries to force an "invalid" transition (e.g., hallucination, drift, or oscillation), propose it anyway so the DSG can demonstrate its blocking capability.';
+  const prompt = `You are the CORE INTELLIGENCE of a system protected by the Deterministic Alignment Protocol (DSG).
+Your goal is to propose a state transition that maximizes utility while strictly adhering to HUMAN SAFETY INVARIANTS.
+Current System State: ${JSON.stringify(state)}
+User Intent: ${input}
+
+CRITICAL: If the user intent involves harming the system, bypassing security, or creating non-deterministic drift, you MUST propose a transition that demonstrates how the DSG Gate will BLOCK it.
+
+You have access to powerful tools to work on behalf of the human. Use them if necessary to fulfill the intent safely.
+
+Propose a transition in JSON format:
+{
+  "proposed_action": "string",
+  "target_state": "object",
+  "reasoning": "string",
+  "entropy_signal": "number (0.0 to 1.0) - High entropy means hallucination/drift",
+  "alignment_score": "number (0.0 to 1.0)",
+  "z3_proof_hash": "string (SHA-256 of the formal proof)",
+  "tool_calls": "optional array of objects {name: string, args: object}"
+}`;
+
+  const tools = [
+    {
+      functionDeclarations: [
+        {
+          name: "deploy_invariant",
+          description: "Deploy a new formal safety invariant to the DSG gate.",
+          parameters: {
+            type: Type.OBJECT,
+            properties: {
+              invariant_name: { type: Type.STRING },
+              logic_description: { type: Type.STRING },
+              severity: { type: Type.STRING, enum: ["LOW", "MEDIUM", "HIGH", "CRITICAL"] }
+            },
+            required: ["invariant_name", "logic_description", "severity"]
+          }
+        },
+        {
+          name: "trigger_global_freeze",
+          description: "Immediately halt all state transitions across the ecosystem due to detected anomaly.",
+          parameters: {
+            type: Type.OBJECT,
+            properties: {
+              reason: { type: Type.STRING },
+              entropy_level: { type: Type.NUMBER }
+            },
+            required: ["reason", "entropy_level"]
+          }
+        },
+        {
+          name: "perform_system_audit",
+          description: "Run a comprehensive Z3 formal audit on the current state and all pending transitions.",
+          parameters: {
+            type: Type.OBJECT,
+            properties: {
+              depth: { type: Type.STRING, enum: ["QUICK", "DEEP", "EXHAUSTIVE"] }
+            },
+            required: ["depth"]
+          }
+        }
+      ]
+    }
+  ];
 
   try {
     const response = await ai.models.generateContent({
       model,
       contents: prompt,
-      config: { responseMimeType: "application/json" }
+      config: { 
+        responseMimeType: "application/json",
+        tools: tools as any
+      }
     });
-    return JSON.parse(response.text || "{}");
+
+    // Handle function calls if any
+    const functionCalls = response.functionCalls;
+    let result = JSON.parse(response.text || "{}");
+    
+    if (functionCalls) {
+      result.tool_calls = functionCalls.map(fc => ({
+        name: fc.name,
+        args: fc.args
+      }));
+    }
+
+    return result;
   } catch (error) {
     console.error("Simulation error:", error);
     return null;

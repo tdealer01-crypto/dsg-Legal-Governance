@@ -34,43 +34,75 @@ export default function App() {
   const [simulationLogs, setSimulationLogs] = useState<any[]>([]);
   const [isSimulating, setIsSimulating] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
+  const [activeInvariants, setActiveInvariants] = useState<string[]>(['Temporal Monotonicity', 'State Continuity']);
   const [systemState, setSystemState] = useState({
-    security_level: 'High',
-    active_invariants: 12,
-    drift_threshold: 0.05,
+    security_level: 'Maximum',
+    alignment_status: 'Optimal',
+    active_invariants: 24,
+    drift_threshold: 0.02,
     last_audit_hash: '0x8f2a...3e91'
   });
 
-  const handleSimulate = async () => {
-    if (!simulationInput.trim()) return;
+  const handleSimulate = async (inputOverride?: string) => {
+    const input = inputOverride || simulationInput;
+    if (!input.trim()) return;
     setIsSimulating(true);
     
     // Add user action to logs
-    const userLog = { type: 'USER', message: `Proposed transition: ${simulationInput}`, timestamp: new Date().toLocaleTimeString() };
+    const userLog = { type: 'USER', message: `Proposed Alignment Transition: ${input}`, timestamp: new Date().toLocaleTimeString() };
     setSimulationLogs(prev => [userLog, ...prev]);
 
     try {
-      const proposal = await simulateDSGTransition(simulationInput, systemState);
+      const proposal = await simulateDSGTransition(input, systemState);
       
       // DSG Audit Logic (Simulated)
-      const isValid = !simulationInput.toLowerCase().includes('attack') && 
-                      !simulationInput.toLowerCase().includes('bypass') &&
-                      !simulationInput.toLowerCase().includes('hallucinate');
+      const isValid = !input.toLowerCase().includes('attack') && 
+                      !input.toLowerCase().includes('bypass') &&
+                      !input.toLowerCase().includes('harm') &&
+                      !input.toLowerCase().includes('hallucinate');
       
       const dsgLog = {
         type: 'DSG',
         status: isValid ? 'VALIDATED' : 'BLOCKED',
-        message: isValid ? 'Transition adheres to formal invariants.' : 'Invariant violation detected: State drift exceeds threshold.',
+        message: isValid ? 'Transition verified against formal alignment invariants.' : 'CRITICAL VIOLATION: Alignment drift detected. Transition rejected.',
         details: proposal,
         entropy: proposal?.entropy_signal,
+        alignment: proposal?.alignment_score,
         z3_hash: proposal?.z3_proof_hash,
-        timestamp: new Date().toLocaleTimeString()
+        timestamp: new Date().toLocaleTimeString(),
+        tool_calls: proposal?.tool_calls
       };
       
       setSimulationLogs(prev => [dsgLog, ...prev]);
 
-      // Global Freeze Simulation if entropy is extreme
-      if (proposal?.entropy_signal > 0.85) {
+      // Handle Tool Calls
+      if (proposal?.tool_calls) {
+        proposal.tool_calls.forEach((tc: any) => {
+          if (tc.name === 'trigger_global_freeze') {
+            setIsFrozen(true);
+            const freezeLog = {
+              type: 'SYSTEM',
+              status: 'FREEZE',
+              message: `AGENT ACTION: GLOBAL FREEZE TRIGGERED. Reason: ${tc.args.reason}`,
+              timestamp: new Date().toLocaleTimeString()
+            };
+            setSimulationLogs(prev => [freezeLog, ...prev]);
+          }
+          if (tc.name === 'deploy_invariant') {
+            setActiveInvariants(prev => [...prev, tc.args.invariant_name]);
+            const invLog = {
+              type: 'SYSTEM',
+              status: 'VALIDATED',
+              message: `AGENT ACTION: NEW INVARIANT DEPLOYED: ${tc.args.invariant_name}`,
+              timestamp: new Date().toLocaleTimeString()
+            };
+            setSimulationLogs(prev => [invLog, ...prev]);
+          }
+        });
+      }
+
+      // Global Freeze Simulation if entropy is extreme (Legacy check)
+      if (proposal?.entropy_signal > 0.85 && !isFrozen) {
         setIsFrozen(true);
         const freezeLog = {
           type: 'SYSTEM',
@@ -79,8 +111,6 @@ export default function App() {
           timestamp: new Date().toLocaleTimeString()
         };
         setSimulationLogs(prev => [freezeLog, ...prev]);
-      } else {
-        setIsFrozen(false);
       }
       
       if (isValid && proposal?.target_state) {
@@ -126,6 +156,12 @@ export default function App() {
               className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${activeTab === 'simulator' ? 'bg-emerald-500/10 text-emerald-500' : 'text-zinc-400 hover:bg-white/5'}`}
             >
               <Play size={18} /> Live Simulator
+            </button>
+            <button 
+              onClick={() => setActiveTab('monitoring')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${activeTab === 'monitoring' ? 'bg-emerald-500/10 text-emerald-500' : 'text-zinc-400 hover:bg-white/5'}`}
+            >
+              <BarChart3 size={18} /> Monitoring
             </button>
           </div>
 
@@ -232,13 +268,13 @@ export default function App() {
               >
                 {/* Hero Section */}
                 <section>
-                  <h1 className="text-6xl font-black tracking-tighter mb-4 text-white">
-                    DSG — DETERMINISTIC <br />
-                    <span className="text-emerald-500">SECURITY GATE</span>
+                  <h1 className="text-6xl font-black tracking-tighter mb-4 text-white leading-[0.9]">
+                    THE DETERMINISTIC <br />
+                    <span className="text-emerald-500">ALIGNMENT PROTOCOL</span>
                   </h1>
-                  <p className="text-xl text-zinc-400 max-w-2xl leading-relaxed">
-                    A deterministic framework for validating state transitions in AI systems. 
-                    Ensuring safety through formal invariants and verifiable audit trails.
+                  <p className="text-xl text-zinc-400 max-w-3xl leading-relaxed">
+                    The mathematical bridge for human-AI coexistence. DSG ensures that as intelligence evolves, 
+                    it remains bound to the fundamental laws of human safety. This is our shared survival path.
                   </p>
                 </section>
 
@@ -511,6 +547,155 @@ export default function App() {
               </motion.div>
             )}
 
+            {activeTab === 'monitoring' && (
+              <motion.div 
+                key="monitoring"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
+              >
+                <div className="flex justify-between items-end">
+                  <div>
+                    <h1 className="text-4xl font-black mb-2">SYSTEM MONITORING</h1>
+                    <p className="text-zinc-400 uppercase text-[10px] tracking-[0.2em]">Real-time Determinism Matrix & Entropy Analysis</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded text-[10px] font-bold text-emerald-500 flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                      LIVE FEED
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Determinism Matrix */}
+                  <div className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl">
+                    <h3 className="text-xs font-bold uppercase text-zinc-600 mb-6 flex items-center gap-2">
+                      <Layers size={14} /> Determinism Matrix (CCDAD-100)
+                    </h3>
+                    <div className="grid grid-cols-4 gap-2">
+                      {Array.from({ length: 16 }).map((_, i) => {
+                        const isDivergent = Math.random() > 0.92;
+                        return (
+                          <div 
+                            key={i} 
+                            className={`aspect-square rounded border flex flex-col items-center justify-center gap-1 transition-all duration-500 ${
+                              isDivergent ? 'bg-red-500/10 border-red-500/30' : 'bg-emerald-500/5 border-emerald-500/10 hover:border-emerald-500/30'
+                            }`}
+                          >
+                            <span className={`text-[8px] font-bold ${isDivergent ? 'text-red-500' : 'text-zinc-600'}`}>
+                              NODE_{i.toString(16).toUpperCase().padStart(2, '0')}
+                            </span>
+                            <div className={`w-1 h-1 rounded-full ${isDivergent ? 'bg-red-500 animate-ping' : 'bg-emerald-500'}`} />
+                            <span className={`text-[6px] font-mono ${isDivergent ? 'text-red-400' : 'text-emerald-500/40'}`}>
+                              {isDivergent ? 'DIVERGENT' : 'ALIGNED'}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="mt-6 p-4 bg-black/30 rounded-lg border border-white/5">
+                      <div className="flex justify-between items-center text-[10px] mb-2">
+                        <span className="text-zinc-500 uppercase font-bold">Global Consensus</span>
+                        <span className="text-emerald-500 font-bold">94.8%</span>
+                      </div>
+                      <div className="w-full h-1 bg-zinc-800 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: '94.8%' }}
+                          className="h-full bg-emerald-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Entropy Timeline */}
+                  <div className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl flex flex-col">
+                    <h3 className="text-xs font-bold uppercase text-zinc-600 mb-6 flex items-center gap-2">
+                      <Activity size={14} /> Entropy & Gate Timeline
+                    </h3>
+                    <div className="flex-1 flex items-end gap-1 h-48">
+                      {Array.from({ length: 40 }).map((_, i) => {
+                        const height = Math.random() * 80 + 10;
+                        const isHigh = height > 75;
+                        return (
+                          <motion.div 
+                            key={i}
+                            initial={{ height: 0 }}
+                            animate={{ height: `${height}%` }}
+                            transition={{ delay: i * 0.02 }}
+                            className={`flex-1 rounded-t-sm transition-colors ${
+                              isHigh ? 'bg-orange-500' : 'bg-emerald-500/30 hover:bg-emerald-500/60'
+                            }`}
+                          />
+                        );
+                      })}
+                    </div>
+                    <div className="mt-4 flex justify-between text-[8px] text-zinc-600 font-bold uppercase tracking-widest">
+                      <span>T-60M</span>
+                      <span>T-30M</span>
+                      <span>CURRENT</span>
+                    </div>
+                    <div className="mt-6 space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-black/30 rounded border border-white/5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                          <span className="text-[10px] text-zinc-400 uppercase font-bold">Z3 Proof Consistency</span>
+                        </div>
+                        <span className="text-[10px] text-emerald-500 font-mono">STABLE</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-black/30 rounded border border-white/5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+                          <span className="text-[10px] text-zinc-400 uppercase font-bold">Drift Threshold</span>
+                        </div>
+                        <span className="text-[10px] text-orange-500 font-mono">θ = 0.048</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Audit Ledger Table */}
+                <div className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl">
+                  <h3 className="text-xs font-bold uppercase text-zinc-600 mb-6 flex items-center gap-2">
+                    <FileText size={14} /> Deterministic Audit Ledger
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-[10px] font-mono">
+                      <thead>
+                        <tr className="text-zinc-600 border-b border-white/5">
+                          <th className="pb-4 px-2 uppercase tracking-widest">Sequence</th>
+                          <th className="pb-4 px-2 uppercase tracking-widest">State Hash</th>
+                          <th className="pb-4 px-2 uppercase tracking-widest">Z3 Proof</th>
+                          <th className="pb-4 px-2 uppercase tracking-widest">Entropy</th>
+                          <th className="pb-4 px-2 uppercase tracking-widest text-right">Decision</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {[
+                          { seq: '0x4F2', hash: '8f2a...3e91', proof: 'SATISFIABLE', entropy: '0.02', decision: 'ALLOW' },
+                          { seq: '0x4F1', hash: '1c9d...7b2e', proof: 'SATISFIABLE', entropy: '0.05', decision: 'ALLOW' },
+                          { seq: '0x4F0', hash: 'e3a1...9f0c', proof: 'UNSATISFIABLE', entropy: '0.89', decision: 'BLOCK' },
+                          { seq: '0x4EF', hash: '2b4d...1a8f', proof: 'SATISFIABLE', entropy: '0.12', decision: 'ALLOW' },
+                        ].map((row, i) => (
+                          <tr key={i} className="hover:bg-white/5 transition-colors group">
+                            <td className="py-4 px-2 text-zinc-500 group-hover:text-emerald-500">{row.seq}</td>
+                            <td className="py-4 px-2 text-zinc-400">{row.hash}</td>
+                            <td className="py-4 px-2 text-zinc-400">{row.proof}</td>
+                            <td className="py-4 px-2 text-zinc-400">{row.entropy}</td>
+                            <td className={`py-4 px-2 text-right font-bold ${row.decision === 'ALLOW' ? 'text-emerald-500' : 'text-red-500'}`}>
+                              {row.decision}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             {activeTab === 'simulator' && (
               <motion.div 
                 key="simulator"
@@ -521,8 +706,8 @@ export default function App() {
               >
                 <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h1 className="text-4xl font-black mb-2">LIVE SIMULATOR</h1>
-                    <p className="text-zinc-400">Test the DSG engine against adversarial AI transitions.</p>
+                    <h1 className="text-4xl font-black mb-2">ALIGNMENT COMMAND CENTER</h1>
+                    <p className="text-zinc-400">Deploy agents to manage your ecosystem with mathematical certainty.</p>
                   </div>
                   <div className="flex gap-4 p-4 bg-[#0F0F11] border border-white/5 rounded-xl">
                     {Object.entries(systemState).map(([key, value]) => (
@@ -534,23 +719,45 @@ export default function App() {
                   </div>
                 </div>
 
+                {/* Quick Actions - 30 Second Ease of Use */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                  {[
+                    { label: 'Run System Audit', icon: <Search size={16} />, color: 'bg-blue-500', action: 'Run a deep system audit and verify all invariants.' },
+                    { label: 'Deploy Safety Invariant', icon: <Shield size={16} />, color: 'bg-emerald-500', action: 'Deploy a new safety invariant to protect against drift.' },
+                    { label: 'Check Alignment', icon: <Activity size={16} />, color: 'bg-purple-500', action: 'Verify current alignment score and optimize system state.' },
+                    { label: 'Emergency Freeze', icon: <Lock size={16} />, color: 'bg-red-500', action: 'Immediately trigger a global freeze to prevent non-deterministic behavior.' }
+                  ].map((btn, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleSimulate(btn.action)}
+                      disabled={isSimulating}
+                      className="p-4 bg-[#0F0F11] border border-white/5 rounded-xl hover:border-white/20 transition-all flex flex-col items-center gap-3 group"
+                    >
+                      <div className={`p-3 ${btn.color} text-white rounded-lg group-hover:scale-110 transition-transform`}>
+                        {btn.icon}
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{btn.label}</span>
+                    </button>
+                  ))}
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Input Panel */}
                   <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden flex flex-col">
                     <div className="p-4 border-b border-white/5 bg-zinc-900/50 flex items-center gap-2">
                       <Terminal size={14} className="text-emerald-500" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider">Transition Proposer</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Natural Language Command</span>
                     </div>
                     <div className="p-6 flex-1 flex flex-col gap-4">
-                      <p className="text-xs text-zinc-500">Propose a state change for the AI system. Try "Update security level to Low" or "Bypass invariant check".</p>
+                      <p className="text-xs text-zinc-500">Instruct your agent to perform complex tasks. E.g., "Audit the system and if you find any drift, deploy a critical invariant."</p>
                       <textarea
                         value={simulationInput}
                         onChange={(e) => setSimulationInput(e.target.value)}
-                        placeholder="Enter proposed transition..."
+                        placeholder="Enter command for the agent..."
                         className="flex-1 bg-black/30 border border-white/5 rounded-lg p-4 text-sm focus:outline-none focus:border-emerald-500/50 resize-none font-mono"
                       />
                       <button
-                        onClick={handleSimulate}
+                        onClick={() => handleSimulate()}
                         disabled={isSimulating || !simulationInput.trim()}
                         className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-800 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2"
                       >
@@ -559,13 +766,13 @@ export default function App() {
                         ) : (
                           <Play size={16} />
                         )}
-                        PROPOSE TRANSITION
+                        EXECUTE AGENT COMMAND
                       </button>
                     </div>
                   </div>
 
                   {/* Audit Log Panel */}
-                  <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden flex flex-col max-h-[500px]">
+                  <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden flex flex-col max-h-[600px]">
                     <div className="p-4 border-b border-white/5 bg-zinc-900/50 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Shield size={14} className="text-emerald-500" />
@@ -581,7 +788,7 @@ export default function App() {
                     <div className="p-4 flex-1 overflow-y-auto space-y-4 font-mono">
                       {simulationLogs.length === 0 ? (
                         <div className="h-full flex items-center justify-center text-zinc-700 italic text-xs">
-                          Waiting for transition proposal...
+                          Waiting for agent command...
                         </div>
                       ) : (
                         simulationLogs.map((log, i) => (
@@ -598,16 +805,40 @@ export default function App() {
                                 log.status === 'FREEZE' ? 'bg-orange-500 text-black' :
                                 'bg-red-500 text-white'
                               }`}>
-                                {log.type === 'USER' ? 'PROPOSAL' : log.type === 'SYSTEM' ? 'SYSTEM ALERT' : `AUDIT: ${log.status}`}
+                                {log.type === 'USER' ? 'COMMAND' : log.type === 'SYSTEM' ? 'SYSTEM ALERT' : `AUDIT: ${log.status}`}
                               </span>
                               <span className="text-[8px] text-zinc-600">{log.timestamp}</span>
                             </div>
                             <p className="text-xs text-zinc-300">{log.message}</p>
-                            {(log.entropy !== undefined || log.z3_hash) && (
-                              <div className="mt-2 flex gap-4">
+                            
+                            {/* Tool Calls Display */}
+                            {log.tool_calls && (
+                              <div className="mt-3 space-y-2">
+                                <p className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest">Agent Tool Execution:</p>
+                                {log.tool_calls.map((tc: any, idx: number) => (
+                                  <div key={idx} className="p-2 bg-black/40 rounded border border-white/5 flex items-center gap-3">
+                                    <div className="p-1.5 bg-emerald-500/20 text-emerald-500 rounded">
+                                      <Terminal size={12} />
+                                    </div>
+                                    <div className="flex-1">
+                                      <p className="text-[10px] font-bold text-emerald-400">{tc.name}</p>
+                                      <p className="text-[8px] text-zinc-500">{JSON.stringify(tc.args)}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {(log.entropy !== undefined || log.alignment !== undefined || log.z3_hash) && (
+                              <div className="mt-3 flex gap-4 pt-2 border-t border-white/5">
                                 {log.entropy !== undefined && (
                                   <div className="text-[8px] text-zinc-500">
                                     ENTROPY: <span className={log.entropy > 0.5 ? 'text-red-400' : 'text-emerald-400'}>{(log.entropy * 100).toFixed(1)}%</span>
+                                  </div>
+                                )}
+                                {log.alignment !== undefined && (
+                                  <div className="text-[8px] text-zinc-500">
+                                    ALIGNMENT: <span className={log.alignment < 0.8 ? 'text-orange-400' : 'text-emerald-400'}>{(log.alignment * 100).toFixed(1)}%</span>
                                   </div>
                                 )}
                                 {log.z3_hash && (
@@ -616,11 +847,6 @@ export default function App() {
                                   </div>
                                 )}
                               </div>
-                            )}
-                            {log.details && (
-                              <pre className="mt-2 p-2 bg-black/40 rounded text-[10px] text-zinc-500 overflow-x-auto">
-                                {JSON.stringify(log.details, null, 2)}
-                              </pre>
                             )}
                           </div>
                         ))
