@@ -71,6 +71,16 @@ To ensure long-term stability as AI approaches AGI/ASI, DSG extends beyond softw
 
 ---
 
+## 📚 Supporting Research (Academic & Technical Validation)
+
+The DSG framework is backed by rigorous academic research and formal verification proofs.
+
+- **[10.5281/zenodo.18244246](https://doi.org/10.5281/zenodo.18244246)**: Engineering Grade Blueprint for Attested AI Systems
+- **[10.5281/zenodo.18225586](https://doi.org/10.5281/zenodo.18225586)**: DSG Awareness Gate System
+- **[10.5281/zenodo.18212854](https://doi.org/10.5281/zenodo.18212854)**: Deterministic Cognitive System Architecture
+
+---
+
 ## 🛠️ Quick Start
 
 \`\`\`bash

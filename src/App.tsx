@@ -437,6 +437,65 @@ export default function App() {
                     </div>
                   </div>
                 </section>
+
+                {/* Supporting Research Section */}
+                <section className="mt-12">
+                  <div className="mb-12">
+                    <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Academic & Technical Validation</h2>
+                    <p className="text-zinc-500 text-sm">งานวิจัยรองรับ: พิสูจน์แนวคิดทางวิชาการและเทคนิค</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <a href="https://doi.org/10.5281/zenodo.18244246" target="_blank" rel="noopener noreferrer" className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
+                      <BookOpen size={32} className="text-emerald-500 mb-4 group-hover:scale-110 transition-transform" />
+                      <h4 className="text-white font-bold mb-2">Research Paper 1</h4>
+                      <p className="text-xs text-zinc-500 font-mono">10.5281/zenodo.18244246</p>
+                    </a>
+                    <a href="https://doi.org/10.5281/zenodo.18225586" target="_blank" rel="noopener noreferrer" className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
+                      <BookOpen size={32} className="text-emerald-500 mb-4 group-hover:scale-110 transition-transform" />
+                      <h4 className="text-white font-bold mb-2">Research Paper 2</h4>
+                      <p className="text-xs text-zinc-500 font-mono">10.5281/zenodo.18225586</p>
+                    </a>
+                    <a href="https://doi.org/10.5281/zenodo.18212854" target="_blank" rel="noopener noreferrer" className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
+                      <BookOpen size={32} className="text-emerald-500 mb-4 group-hover:scale-110 transition-transform" />
+                      <h4 className="text-white font-bold mb-2">Research Paper 3</h4>
+                      <p className="text-xs text-zinc-500 font-mono">10.5281/zenodo.18212854</p>
+                    </a>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden group">
+                      <div className="aspect-square bg-zinc-900 relative flex items-center justify-center p-4">
+                        <img src="/research-1.png" alt="Attested AI Orchestration" className="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity" onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800'; }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F11] to-transparent opacity-60" />
+                      </div>
+                      <div className="p-6">
+                        <h4 className="text-sm font-bold text-white mb-1">Attested AI Orchestration</h4>
+                        <p className="text-xs text-zinc-500">Engineering Grade Blueprint for Attested AI Systems</p>
+                      </div>
+                    </div>
+                    <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden group">
+                      <div className="aspect-square bg-zinc-900 relative flex items-center justify-center p-4">
+                        <img src="/research-2.png" alt="DSG Awareness Gate System" className="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity" onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800'; }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F11] to-transparent opacity-60" />
+                      </div>
+                      <div className="p-6">
+                        <h4 className="text-sm font-bold text-white mb-1">DSG Awareness Gate System</h4>
+                        <p className="text-xs text-zinc-500">Harmonic Truth, Z3 SMT Solver, MAKK8 Arbiter</p>
+                      </div>
+                    </div>
+                    <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden group">
+                      <div className="aspect-square bg-zinc-900 relative flex items-center justify-center p-4">
+                        <img src="/research-3.png" alt="Deterministic Cognitive System Architecture" className="w-full h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity" onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'; }} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F11] to-transparent opacity-60" />
+                      </div>
+                      <div className="p-6">
+                        <h4 className="text-sm font-bold text-white mb-1">Deterministic Cognitive System</h4>
+                        <p className="text-xs text-zinc-500">Cognitive Layer, State Gate, Formal Arbiter</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
               </motion.div>
             )}
 
