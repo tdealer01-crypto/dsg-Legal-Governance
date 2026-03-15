@@ -15,14 +15,14 @@ The DSG Protocol is organized into a modular ecosystem of specialized repositori
 
 | Repository | Artifacts | Description |
 |------------|-----------|-------------|
-| [**dsg-core**](https://github.com/dsg-protocol/dsg-core) | Algorithm + Python Kernel | The formal reasoning engine and reference implementation. |
-| [**dsg-audit**](https://github.com/dsg-protocol/dsg-audit) | Deterministic Ledger | Cryptographic proof chain for unforgeable audit trails. |
-| [**dsg-simulator**](https://github.com/dsg-protocol/dsg-simulator) | Attack Vectors | Environment for simulating hallucination and drift attacks. |
-| [**dsg-demo**](https://github.com/dsg-protocol/dsg-demo) | Interactive UI | Real-time visualization of the DSG gate in action. |
-| [**dsg-benchmarks**](https://github.com/dsg-protocol/dsg-benchmarks) | O(1) Performance | Proving 3–6 µs latency for 100k+ transitions. |
-| [**dsg-papers**](https://github.com/dsg-protocol/dsg-papers) | Z3 Proofs + arXiv | Formal mathematical specifications and proof artifacts. |
-| [**dsg-silicon**](https://github.com/dsg-protocol/dsg-silicon) | Hardware Blueprints | Open-source Verilog/Chisel designs for FPGA/ASIC integration. |
-| [**dsg-feedback-loop**](https://github.com/dsg-protocol/dsg-feedback-loop) | AI Self-Correction | PyTorch integration for Z3 UNSAT core backpropagation. |
+| **dsg-core** | Algorithm + Python Kernel | The formal reasoning engine and reference implementation. |
+| **dsg-audit** | Deterministic Ledger | Cryptographic proof chain for unforgeable audit trails. |
+| **dsg-simulator** | Attack Vectors | Environment for simulating hallucination and drift attacks. |
+| **dsg-demo** | Interactive UI | Real-time visualization of the DSG gate in action. |
+| **dsg-benchmarks** | O(1) Performance | Proving 3–6 µs latency for 100k+ transitions. |
+| **dsg-papers** | Z3 Proofs + arXiv | Formal mathematical specifications and proof artifacts. |
+| **dsg-silicon** | Hardware Blueprints | Open-source Verilog/Chisel designs for FPGA/ASIC integration. |
+| **dsg-feedback-loop** | AI Self-Correction | PyTorch integration for Z3 UNSAT core backpropagation. |
 
 ---
 

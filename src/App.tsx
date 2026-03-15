@@ -236,6 +236,7 @@ export default function App() {
               { id: 'visualizer', label: 'Interactive Demo', icon: <Play size={18} /> },
               { id: 'simulator', label: 'Command Center', icon: <Terminal size={18} /> },
               { id: 'mcp-gateway', label: 'Live Agent Gateway', icon: <Zap size={18} /> },
+              { id: 'clawmetry', label: 'ClawMetry Dashboard', icon: <Activity size={18} /> },
               { id: 'developer', label: 'API Keys & Access', icon: <Key size={18} /> },
               { id: 'monitoring', label: 'Live Attestation', icon: <Layers size={18} /> },
               { id: 'benchmarks', label: 'Benchmarks', icon: <BarChart3 size={18} /> },
@@ -475,21 +476,21 @@ export default function App() {
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <a href="https://doi.org/10.5281/zenodo.18244246" target="_blank" rel="noopener noreferrer" className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
+                    <button onClick={() => alert('Research paper is currently under peer review. Access will be granted upon publication.')} className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
                       <BookOpen size={32} className="text-emerald-500 mb-4 group-hover:scale-110 transition-transform" />
                       <h4 className="text-white font-bold mb-2">Research Paper 1</h4>
                       <p className="text-xs text-zinc-500 font-mono">10.5281/zenodo.18244246</p>
-                    </a>
-                    <a href="https://doi.org/10.5281/zenodo.18225586" target="_blank" rel="noopener noreferrer" className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
+                    </button>
+                    <button onClick={() => alert('Research paper is currently under peer review. Access will be granted upon publication.')} className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
                       <BookOpen size={32} className="text-emerald-500 mb-4 group-hover:scale-110 transition-transform" />
                       <h4 className="text-white font-bold mb-2">Research Paper 2</h4>
                       <p className="text-xs text-zinc-500 font-mono">10.5281/zenodo.18225586</p>
-                    </a>
-                    <a href="https://doi.org/10.5281/zenodo.18212854" target="_blank" rel="noopener noreferrer" className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
+                    </button>
+                    <button onClick={() => alert('Research paper is currently under peer review. Access will be granted upon publication.')} className="p-6 bg-[#0F0F11] border border-white/5 rounded-2xl hover:border-emerald-500/50 transition-all group flex flex-col items-center text-center">
                       <BookOpen size={32} className="text-emerald-500 mb-4 group-hover:scale-110 transition-transform" />
                       <h4 className="text-white font-bold mb-2">Research Paper 3</h4>
                       <p className="text-xs text-zinc-500 font-mono">10.5281/zenodo.18212854</p>
-                    </a>
+                    </button>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -542,15 +543,13 @@ export default function App() {
                     <p className="text-zinc-400 max-w-xl">{selectedRepo.description}</p>
                   </div>
                   <div className="flex gap-2">
-                    <a 
-                      href={selectedRepo.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                    <button 
+                      onClick={() => alert('This repository is currently private and under active development. Access will be granted upon official release.')}
                       className="px-4 py-2 bg-zinc-900 border border-white/10 rounded text-xs font-bold hover:bg-zinc-800 transition-colors flex items-center gap-2"
                     >
                       <Github size={14} /> View Source
-                    </a>
-                    <button className="px-4 py-2 bg-emerald-600 text-white rounded text-xs font-bold hover:bg-emerald-500 transition-colors">Documentation</button>
+                    </button>
+                    <button onClick={() => alert('Documentation is being finalized for the upcoming release.')} className="px-4 py-2 bg-emerald-600 text-white rounded text-xs font-bold hover:bg-emerald-500 transition-colors">Documentation</button>
                   </div>
                 </div>
 
@@ -1004,6 +1003,34 @@ export default function App() {
                       </p>
                     </div>
                   ))}
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'clawmetry' && (
+              <motion.div
+                key="clawmetry"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                className="h-[800px] w-full bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden flex flex-col"
+              >
+                <div className="p-4 border-b border-white/5 bg-zinc-900/50 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Activity size={18} className="text-emerald-500" />
+                    <h2 className="text-sm font-bold uppercase tracking-widest">ClawMetry Dashboard</h2>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Live Connection</span>
+                  </div>
+                </div>
+                <div className="flex-1 w-full h-full relative">
+                  <iframe 
+                    src="https://clawmetry.onrender.com" 
+                    className="w-full h-full border-0"
+                    title="ClawMetry Dashboard"
+                  />
                 </div>
               </motion.div>
             )}

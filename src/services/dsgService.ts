@@ -2,9 +2,9 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 export const masterReadme = `# DSG — Deterministic Security Gate 🛡️
 
-[![GitHub Stars](https://img.shields.io/github/stars/dsg-protocol/dsg?style=for-the-badge&color=emerald)](https://github.com/dsg-protocol/dsg)
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Mainnet_Active-success?style=for-the-badge)](https://dsg-protocol.org)
+[![GitHub Stars](https://img.shields.io/github/stars/dsg-protocol/dsg?style=for-the-badge&color=emerald)](#)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge)](#)
+[![Status](https://img.shields.io/badge/Status-Mainnet_Active-success?style=for-the-badge)](#)
 
 **The Mathematical Bridge for Human-AI Coexistence.**  
 DSG is a deterministic framework for validating state transitions in AI systems using formal verification. Unlike probabilistic guardrails, DSG ensures that every action taken by an AI is mathematically proven to be within the safety envelope defined by human intent.
@@ -17,14 +17,14 @@ The DSG Protocol is organized into a modular ecosystem of specialized repositori
 
 | Repository | Artifacts | Description |
 |------------|-----------|-------------|
-| [**dsg-core**](https://github.com/dsg-protocol/dsg-core) | Algorithm + Python Kernel | The formal reasoning engine and reference implementation. |
-| [**dsg-audit**](https://github.com/dsg-protocol/dsg-audit) | Deterministic Ledger | Cryptographic proof chain for unforgeable audit trails. |
-| [**dsg-simulator**](https://github.com/dsg-protocol/dsg-simulator) | Attack Vectors | Environment for simulating hallucination and drift attacks. |
-| [**dsg-demo**](https://github.com/dsg-protocol/dsg-demo) | Interactive UI | Real-time visualization of the DSG gate in action. |
-| [**dsg-benchmarks**](https://github.com/dsg-protocol/dsg-benchmarks) | O(1) Performance | Proving 3–6 µs latency for 100k+ transitions. |
-| [**dsg-papers**](https://github.com/dsg-protocol/dsg-papers) | Z3 Proofs + arXiv | Formal mathematical specifications and proof artifacts. |
-| [**dsg-silicon**](https://github.com/dsg-protocol/dsg-silicon) | Hardware Blueprints | Open-source Verilog/Chisel designs for FPGA/ASIC integration. |
-| [**dsg-feedback-loop**](https://github.com/dsg-protocol/dsg-feedback-loop) | AI Self-Correction | PyTorch integration for Z3 UNSAT core backpropagation. |
+| **dsg-core** | Algorithm + Python Kernel | The formal reasoning engine and reference implementation. |
+| **dsg-audit** | Deterministic Ledger | Cryptographic proof chain for unforgeable audit trails. |
+| **dsg-simulator** | Attack Vectors | Environment for simulating hallucination and drift attacks. |
+| **dsg-demo** | Interactive UI | Real-time visualization of the DSG gate in action. |
+| **dsg-benchmarks** | O(1) Performance | Proving 3–6 µs latency for 100k+ transitions. |
+| **dsg-papers** | Z3 Proofs + arXiv | Formal mathematical specifications and proof artifacts. |
+| **dsg-silicon** | Hardware Blueprints | Open-source Verilog/Chisel designs for FPGA/ASIC integration. |
+| **dsg-feedback-loop** | AI Self-Correction | PyTorch integration for Z3 UNSAT core backpropagation. |
 
 ---
 
@@ -85,7 +85,7 @@ The DSG framework is backed by rigorous academic research and formal verificatio
 
 \`\`\`bash
 # Clone the core engine
-git clone https://github.com/dsg-protocol/dsg-core.git
+git clone https://github.com/tdealer01-crypto/dsg-Legal-Governance.git
 
 # Run the benchmark
 python dsg-benchmarks/bench.py
