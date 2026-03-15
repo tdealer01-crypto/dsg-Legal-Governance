@@ -33,7 +33,9 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ecosystemRepos, simulateDSGTransition, masterReadme, launchStrategy, formalSpec } from './services/dsgService';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import { ecosystemRepos, simulateDSGTransition, masterReadme, launchStrategy, algorithmicCore } from './services/dsgService';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -213,7 +215,7 @@ export default function App() {
               { id: 'simulator', label: 'Command Center', icon: <Terminal size={18} /> },
               { id: 'monitoring', label: 'Live Attestation', icon: <Layers size={18} /> },
               { id: 'benchmarks', label: 'Benchmarks', icon: <BarChart3 size={18} /> },
-              { id: 'specification', label: 'Formal Spec', icon: <Code2 size={18} /> },
+              { id: 'specification', label: 'Algorithm & Claims', icon: <Code2 size={18} /> },
               { id: 'readme', label: 'Whitepaper', icon: <BookOpen size={18} /> },
               { id: 'strategy', label: 'Launch Strategy', icon: <Zap size={18} /> },
             ].map(item => (
@@ -299,8 +301,11 @@ export default function App() {
                   prose-th:bg-zinc-900 prose-th:p-3 prose-th:text-left
                   prose-td:p-3 prose-td:border-t prose-td:border-white/5
                 ">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {activeTab === 'readme' ? masterReadme : activeTab === 'strategy' ? launchStrategy : formalSpec}
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm, remarkMath]} 
+                    rehypePlugins={[rehypeKatex]}
+                  >
+                    {activeTab === 'readme' ? masterReadme : activeTab === 'strategy' ? launchStrategy : algorithmicCore}
                   </ReactMarkdown>
                 </div>
               </motion.div>
