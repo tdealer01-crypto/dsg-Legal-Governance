@@ -36,6 +36,9 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { ecosystemRepos, simulateDSGTransition, masterReadme, launchStrategy, algorithmicCore } from './services/dsgService';
+import MCPGateway from './components/MCPGateway';
+import DeveloperPortal, { APIKey } from './components/DeveloperPortal';
+import { Key } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -45,6 +48,25 @@ export default function App() {
   const [simulationLogs, setSimulationLogs] = useState<any[]>([]);
   const [isSimulating, setIsSimulating] = useState(false);
   const [isFrozen, setIsFrozen] = useState(false);
+
+  // Global state for API Keys and Usage
+  const [apiKeys, setApiKeys] = useState<APIKey[]>([]);
+  const [usageCount, setUsageCount] = useState(0);
+
+  const handleGenerateKey = () => {
+    const newKey: APIKey = {
+      id: Math.random().toString(36).substring(7),
+      key: `dsg_live_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`,
+      createdAt: new Date().toLocaleDateString(),
+      lastUsed: null,
+      status: 'active'
+    };
+    setApiKeys(prev => [newKey, ...prev]);
+  };
+
+  const handleUsage = () => {
+    setUsageCount(prev => prev + 1);
+  };
   const [activeInvariants, setActiveInvariants] = useState<string[]>(['Temporal Monotonicity', 'State Continuity']);
   const [demoStatus, setDemoStatus] = useState<'idle' | 'processing' | 'ALLOW' | 'BLOCK' | 'STABILIZE'>('idle');
   const [demoActiveNode, setDemoActiveNode] = useState(0);
@@ -213,6 +235,8 @@ export default function App() {
               { id: 'overview', label: 'Protocol Overview', icon: <Activity size={18} /> },
               { id: 'visualizer', label: 'Interactive Demo', icon: <Play size={18} /> },
               { id: 'simulator', label: 'Command Center', icon: <Terminal size={18} /> },
+              { id: 'mcp-gateway', label: 'Live Agent Gateway', icon: <Zap size={18} /> },
+              { id: 'developer', label: 'API Keys & Access', icon: <Key size={18} /> },
               { id: 'monitoring', label: 'Live Attestation', icon: <Layers size={18} /> },
               { id: 'benchmarks', label: 'Benchmarks', icon: <BarChart3 size={18} /> },
               { id: 'specification', label: 'Algorithm & Claims', icon: <Code2 size={18} /> },
@@ -981,6 +1005,28 @@ export default function App() {
                     </div>
                   ))}
                 </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'mcp-gateway' && (
+              <motion.div
+                key="mcp-gateway"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+              >
+                <MCPGateway keys={apiKeys} onUsage={handleUsage} />
+              </motion.div>
+            )}
+
+            {activeTab === 'developer' && (
+              <motion.div
+                key="developer"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+              >
+                <DeveloperPortal keys={apiKeys} onGenerateKey={handleGenerateKey} usageCount={usageCount} />
               </motion.div>
             )}
 
